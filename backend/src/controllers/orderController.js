@@ -39,6 +39,56 @@ const create = async (req, res) => {
   });
 };
 
+const checkout = async (req, res) => {
+  const { items } = req.body;
+
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: "Cart is empty" });
+  }
+
+  const orders = [];
+
+  for (const item of items) {
+    const product = await Product.findById(item.productId);
+    if (!product) continue;
+
+    const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
+    const amount = Number(product.price) * qty;
+    const pointsEarned = pointsForAmount(amount);
+
+    const order = await Order.create(req.user.id, product.id, qty, amount, pointsEarned);
+    await PointsLedger.earn(req.user.id, {
+      orderId: order.id,
+      points: pointsEarned,
+      source: "order",
+      note: `Order #${order.id}`,
+    });
+
+    orders.push({
+      id: order.id,
+      productId: product.id,
+      productName: product.name,
+      productImage: product.image_url,
+      quantity: order.quantity,
+      amount: Number(order.amount),
+      pointsEarned: order.points_earned,
+      createdAt: order.created_at,
+    });
+  }
+
+  if (orders.length === 0) {
+    return res.status(400).json({ error: "No valid items in cart" });
+  }
+
+  const balance = await PointsLedger.getBalance(req.user.id);
+  const nextExpiry = await PointsLedger.getNextExpiry(req.user.id);
+
+  res.status(201).json({
+    orders,
+    loyalty: loyaltyStatus(balance, nextExpiry),
+  });
+};
+
 const listMine = async (req, res) => {
   const orders = await Order.findByUser(req.user.id);
   res.json(
@@ -55,4 +105,4 @@ const listMine = async (req, res) => {
   );
 };
 
-module.exports = { create, listMine };
+module.exports = { create, checkout, listMine };

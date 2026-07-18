@@ -17,14 +17,14 @@ export const getProducts = (category) =>
 
 export const getCategories = () => request('/api/products/categories')
 
-export const buyProduct = (productId, quantity = 1) =>
-  request('/api/orders', {
+export const getMyOrders = () => request('/api/orders/me')
+
+export const checkoutCart = (items) =>
+  request('/api/orders/checkout', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ productId, quantity }),
+    body: JSON.stringify({ items }),
   })
-
-export const getMyOrders = () => request('/api/orders/me')
 
 export const getRewards = () => request('/api/rewards')
 
@@ -34,3 +34,8 @@ export const redeemReward = (id) =>
 export const getRedemptions = () => request('/api/rewards/redemptions')
 
 export const getMyReferrals = () => request('/api/referrals/me')
+
+export const submitInvoiceClaim = (formData) =>
+  request('/api/invoice-claims', { method: 'POST', body: formData })
+
+export const getMyInvoiceClaims = () => request('/api/invoice-claims/me')

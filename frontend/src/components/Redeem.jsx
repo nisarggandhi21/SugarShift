@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getRewards, redeemReward, getRedemptions } from '../api'
 import LoyaltyPanel from './LoyaltyPanel'
+import InvoiceClaim from './InvoiceClaim'
 
 const dateLabel = (d) =>
   new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -114,6 +115,8 @@ function Redeem({ user, onLoyaltyUpdate, onNotify }) {
               )}
             </div>
           )}
+
+          <InvoiceClaim user={user} onLoyaltyUpdate={onLoyaltyUpdate} onNotify={onNotify} />
         </>
       )}
     </main>

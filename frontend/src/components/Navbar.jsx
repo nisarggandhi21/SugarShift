@@ -26,6 +26,8 @@ function Navbar({
   onMenuOpenChange,
   theme,
   onThemeToggle,
+  cartCount,
+  onCartOpen,
 }) {
   return (
     <header className="sticky top-0 z-30 flex items-center gap-8 border-b-2 border-line bg-surface px-8 py-4">
@@ -63,6 +65,29 @@ function Navbar({
             {user.loyalty.tier} · {user.loyalty.points.toLocaleString('en-IN')} pts
           </button>
         )}
+        <button
+          type="button"
+          onClick={onCartOpen}
+          aria-label="Open cart"
+          className="relative flex h-10 w-10 items-center justify-center rounded-full border-2 border-line bg-surface text-ink transition hover:-translate-x-px hover:-translate-y-px hover:shadow-hard-sm"
+        >
+          <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
+            <path
+              d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L20.5 7H6"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <circle cx="9.5" cy="20" r="1.4" fill="currentColor" />
+            <circle cx="17.5" cy="20" r="1.4" fill="currentColor" />
+          </svg>
+          {cartCount > 0 && (
+            <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full border-2 border-line bg-accent px-1 text-[10px] font-extrabold text-accent-ink">
+              {cartCount}
+            </span>
+          )}
+        </button>
         <ThemeToggle theme={theme} onToggle={onThemeToggle} />
         <AccountMenu
           user={user}

@@ -1,9 +1,18 @@
+import { useState } from 'react'
+
 const money = (n) => `₹${Number(n).toLocaleString('en-IN')}`
 
-function ProductCard({ product, onBuy, busy }) {
+function ProductCard({ product, onAddToCart }) {
   const price = Number(product.price)
   const compareAt = product.compare_at_price ? Number(product.compare_at_price) : null
   const discount = compareAt ? Math.round(((compareAt - price) / compareAt) * 100) : null
+  const [added, setAdded] = useState(false)
+
+  const handleClick = () => {
+    onAddToCart(product)
+    setAdded(true)
+    setTimeout(() => setAdded(false), 1200)
+  }
 
   return (
     <div className="relative flex flex-col overflow-hidden rounded-2xl border-2 border-line bg-surface shadow-hard transition hover:-translate-x-0.5 hover:-translate-y-0.5">
@@ -28,13 +37,8 @@ function ProductCard({ product, onBuy, busy }) {
             <span className="text-[12.5px] text-ink-muted line-through">{money(compareAt)}</span>
           )}
         </div>
-        <button
-          type="button"
-          className="btn btn-accent mt-auto w-full"
-          onClick={() => onBuy(product)}
-          disabled={busy}
-        >
-          {busy ? 'Adding…' : 'Buy now'}
+        <button type="button" className="btn btn-accent mt-auto w-full" onClick={handleClick}>
+          {added ? 'Added ✓' : 'Add to cart'}
         </button>
       </div>
     </div>

@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
-import { getProducts, buyProduct } from '../api'
+import { getProducts } from '../api'
 import ProductCard from './ProductCard'
 import LoyaltyPanel from './LoyaltyPanel'
 
 const CATEGORIES = ['All', 'Lips', 'Eyes', 'Face', 'Skincare', 'Nails', 'Fragrance & Body', 'Kits & Sets']
 
-function Shop({ user, onLoyaltyUpdate, onNotify, onRequireAuth }) {
+function Shop({ user, onAddToCart }) {
   const [products, setProducts] = useState([])
   const [category, setCategory] = useState('All')
   const [loading, setLoading] = useState(true)
-  const [buyingId, setBuyingId] = useState(null)
 
   useEffect(() => {
     setLoading(true)
@@ -17,24 +16,6 @@ function Shop({ user, onLoyaltyUpdate, onNotify, onRequireAuth }) {
       .then(setProducts)
       .finally(() => setLoading(false))
   }, [category])
-
-  const handleBuy = async (product) => {
-    if (!user) {
-      onRequireAuth()
-      return
-    }
-
-    setBuyingId(product.id)
-    try {
-      const { order, loyalty } = await buyProduct(product.id, 1)
-      onLoyaltyUpdate(loyalty)
-      onNotify(`Added to your order — +${order.pointsEarned} pts earned`, 'success')
-    } catch (err) {
-      onNotify(err.message, 'error')
-    } finally {
-      setBuyingId(null)
-    }
-  }
 
   return (
     <main className="mx-auto w-full max-w-[1280px] flex-1 p-8">
@@ -71,7 +52,7 @@ function Shop({ user, onLoyaltyUpdate, onNotify, onRequireAuth }) {
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5 text-left">
           {products.map((p) => (
-            <ProductCard key={p.id} product={p} onBuy={handleBuy} busy={buyingId === p.id} />
+            <ProductCard key={p.id} product={p} onAddToCart={onAddToCart} />
           ))}
         </div>
       )}

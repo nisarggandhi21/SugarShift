@@ -10,11 +10,13 @@ const Product = require("./models/Product");
 const Order = require("./models/Order");
 const PointsLedger = require("./models/PointsLedger");
 const Referral = require("./models/Referral");
+const InvoiceClaim = require("./models/InvoiceClaim");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const rewardRoutes = require("./routes/rewardRoutes");
 const referralRoutes = require("./routes/referralRoutes");
+const invoiceClaimRoutes = require("./routes/invoiceClaimRoutes");
 
 const app = express();
 
@@ -38,6 +40,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/rewards", rewardRoutes);
 app.use("/api/referrals", referralRoutes);
+app.use("/api/invoice-claims", invoiceClaimRoutes);
 
 const PORT = process.env.PORT || 5000;
 
@@ -47,6 +50,7 @@ connectDB()
   .then(() => Order.ensureTable())
   .then(() => PointsLedger.ensureTable())
   .then(() => Referral.ensureTable())
+  .then(() => InvoiceClaim.ensureTable())
   .then(() => Product.seedIfEmpty())
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
