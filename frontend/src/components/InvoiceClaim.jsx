@@ -66,12 +66,14 @@ function InvoiceClaim({ user, onLoyaltyUpdate, onNotify }) {
   }
 
   return (
-    <div className="mt-10">
-      <h2 className="mb-2 text-2xl">Claim points from an invoice</h2>
-      <p className="card-subtitle mb-4">
-        Bought SUGAR on Amazon, Flipkart, DMart, or anywhere else? Upload your invoice to claim
-        points at the same rate as a direct purchase.
-      </p>
+    <main className="mx-auto w-full max-w-[1280px] flex-1 p-8">
+      <div className="mb-6 text-left">
+        <h1 className="text-[44px] leading-none">Claim points from an invoice</h1>
+        <p className="card-subtitle">
+          Bought SUGAR on Amazon, Flipkart, DMart, or anywhere else? Upload your invoice to claim
+          points at the same rate as a direct purchase.
+        </p>
+      </div>
 
       <div className="card mb-7">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
@@ -140,7 +142,7 @@ function InvoiceClaim({ user, onLoyaltyUpdate, onNotify }) {
 
       {user && (
         <>
-          <h3 className="mb-3 font-sans text-base font-bold normal-case">Your claims</h3>
+          <h2 className="mb-3 text-2xl">Your claims</h2>
           {loading ? (
             <p className="py-6 text-center font-semibold text-ink-muted">Loading…</p>
           ) : claims.length === 0 ? (
@@ -174,7 +176,7 @@ function InvoiceClaim({ user, onLoyaltyUpdate, onNotify }) {
           )}
         </>
       )}
-    </div>
+    </main>
   )
 }
 

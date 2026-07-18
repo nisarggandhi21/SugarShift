@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Navbar from './components/Navbar'
 import Shop from './components/Shop'
 import Redeem from './components/Redeem'
+import InvoiceClaim from './components/InvoiceClaim'
 import Referrals from './components/Referrals'
 import Masterclass from './components/Masterclass'
 import OrdersHistory from './components/OrdersHistory'
@@ -129,6 +130,9 @@ function App() {
       {view === 'shop' && <Shop user={user} onAddToCart={handleAddToCart} />}
       {view === 'redeem' && (
         <Redeem user={user} onLoyaltyUpdate={handleLoyaltyUpdate} onNotify={notify} />
+      )}
+      {view === 'invoice-claim' && (
+        <InvoiceClaim user={user} onLoyaltyUpdate={handleLoyaltyUpdate} onNotify={notify} />
       )}
       {view === 'referrals' && <Referrals user={user} onNotify={notify} />}
       {view === 'masterclass' && <Masterclass user={user} onNotify={notify} />}

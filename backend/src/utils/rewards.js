@@ -29,6 +29,13 @@ const REWARDS = [
     description: "Our bestselling makeup kit, free",
     cost: 1200,
   },
+  {
+    id: "r6",
+    name: "Dinner with the Founders",
+    description: "An exclusive evening with Vineeta Singh & Kaushik Mukherjee, SUGAR's founders",
+    cost: 5000,
+    grand: true,
+  },
 ];
 
 const findReward = (id) => REWARDS.find((r) => r.id === id);

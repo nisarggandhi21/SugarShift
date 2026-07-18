@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getRewards, redeemReward, getRedemptions } from '../api'
 import LoyaltyPanel from './LoyaltyPanel'
-import InvoiceClaim from './InvoiceClaim'
 
 const dateLabel = (d) =>
   new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -66,8 +65,18 @@ function Redeem({ user, onLoyaltyUpdate, onNotify }) {
             {rewards.map((r) => {
               const affordable = balance >= r.cost
               return (
-                <div key={r.id} className="card flex flex-col gap-3">
+                <div
+                  key={r.id}
+                  className={`card flex flex-col gap-3 ${
+                    r.grand ? 'col-span-full bg-cream ring-2 ring-tier-gold' : ''
+                  }`}
+                >
                   <div>
+                    {r.grand && (
+                      <span className="mb-2 inline-block rounded-full border-2 border-line bg-yellow px-3 py-1 text-[11px] font-extrabold tracking-wide uppercase">
+                        Grand reward
+                      </span>
+                    )}
                     <h3 className="font-sans text-sm font-bold normal-case">{r.name}</h3>
                     <p className="mt-1 text-[12.5px] text-ink-muted">{r.description}</p>
                   </div>
@@ -115,8 +124,6 @@ function Redeem({ user, onLoyaltyUpdate, onNotify }) {
               )}
             </div>
           )}
-
-          <InvoiceClaim user={user} onLoyaltyUpdate={onLoyaltyUpdate} onNotify={onNotify} />
         </>
       )}
     </main>

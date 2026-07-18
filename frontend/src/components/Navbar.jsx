@@ -1,12 +1,12 @@
 import AccountMenu from './AccountMenu'
 import ThemeToggle from './ThemeToggle'
+import NavDropdown from './NavDropdown'
 
-const TABS = [
-  { key: 'shop', label: 'Shop' },
-  { key: 'redeem', label: 'Redeem' },
+const LOYALTY_ITEMS = [
+  { key: 'redeem', label: 'Redeem points' },
+  { key: 'invoice-claim', label: 'Claim from invoice' },
   { key: 'referrals', label: 'Refer & earn' },
   { key: 'masterclass', label: 'Masterclass' },
-  { key: 'orders', label: 'My orders' },
 ]
 
 const TIER_CHIP_CLASSES = {
@@ -36,21 +36,32 @@ function Navbar({
         <span className="font-display text-2xl uppercase tracking-wide">SugarShift</span>
       </div>
 
-      <nav className="flex flex-1 gap-1.5 overflow-x-auto">
-        {TABS.map((tab) => (
-          <button
-            key={tab.key}
-            type="button"
-            onClick={() => onNavigate(tab.key)}
-            className={
-              view === tab.key
-                ? 'shrink-0 rounded-md border-2 border-line bg-yellow px-3 py-1.5 text-sm font-bold text-ink'
-                : 'shrink-0 rounded-md px-3.5 py-2 text-sm font-bold text-ink-muted transition hover:bg-cream hover:text-ink'
-            }
-          >
-            {tab.label}
-          </button>
-        ))}
+      <nav className="flex flex-1 items-center gap-1.5">
+        <button
+          type="button"
+          onClick={() => onNavigate('shop')}
+          className={
+            view === 'shop'
+              ? 'shrink-0 rounded-md border-2 border-line bg-yellow px-3 py-1.5 text-sm font-bold text-ink'
+              : 'shrink-0 rounded-md px-3.5 py-2 text-sm font-bold text-ink-muted transition hover:bg-cream hover:text-ink'
+          }
+        >
+          Shop
+        </button>
+
+        <NavDropdown label="Loyalty" items={LOYALTY_ITEMS} activeKey={view} onSelect={onNavigate} />
+
+        <button
+          type="button"
+          onClick={() => onNavigate('orders')}
+          className={
+            view === 'orders'
+              ? 'shrink-0 rounded-md border-2 border-line bg-yellow px-3 py-1.5 text-sm font-bold text-ink'
+              : 'shrink-0 rounded-md px-3.5 py-2 text-sm font-bold text-ink-muted transition hover:bg-cream hover:text-ink'
+          }
+        >
+          My orders
+        </button>
       </nav>
 
       <div className="flex items-center gap-3.5">
