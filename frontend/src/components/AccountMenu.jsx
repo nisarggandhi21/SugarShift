@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
+const API_BASE = import.meta.env.VITE_API_URL || ''
+
 const initials = (user) => {
   const source = user.name || user.email || '?'
   return source
@@ -50,7 +52,7 @@ function AccountMenu({ user, onAuthSuccess, onLogout, open, onOpenChange }) {
     setError('')
     setBusy(true)
 
-    const url = mode === 'login' ? '/api/auth/login' : '/api/auth/register'
+    const url = `${API_BASE}${mode === 'login' ? '/api/auth/login' : '/api/auth/register'}`
     try {
       const res = await fetch(url, {
         method: 'POST',
@@ -72,7 +74,7 @@ function AccountMenu({ user, onAuthSuccess, onLogout, open, onOpenChange }) {
   }
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    await fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', credentials: 'include' })
     onLogout()
     setOpen(false)
   }
@@ -207,7 +209,7 @@ function AccountMenu({ user, onAuthSuccess, onLogout, open, onOpenChange }) {
               </div>
 
               <a
-                href="/api/auth/google"
+                href={`${API_BASE}/api/auth/google`}
                 className="flex items-center justify-center gap-2.5 rounded-lg border-2 border-line py-2.5 text-[13px] font-bold text-ink no-underline transition hover:bg-cream"
               >
                 <svg viewBox="0 0 18 18" className="h-4 w-4" aria-hidden="true">

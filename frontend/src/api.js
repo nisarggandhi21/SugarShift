@@ -1,5 +1,7 @@
-const request = async (url, options = {}) => {
-  const res = await fetch(url, { credentials: 'include', ...options })
+const API_BASE = import.meta.env.VITE_API_URL || ''
+
+const request = async (path, options = {}) => {
+  const res = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...options })
   const data = await res.json().catch(() => null)
   if (!res.ok) {
     throw new Error(data?.error || 'Something went wrong')
@@ -8,7 +10,7 @@ const request = async (url, options = {}) => {
 }
 
 export const getMe = () =>
-  fetch('/api/auth/me', { credentials: 'include' }).then((res) =>
+  fetch(`${API_BASE}/api/auth/me`, { credentials: 'include' }).then((res) =>
     res.ok ? res.json() : null
   )
 

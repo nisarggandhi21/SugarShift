@@ -25,6 +25,7 @@ const communityRoutes = require("./routes/communityRoutes");
 
 const app = express();
 
+app.set("trust proxy", 1);
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());

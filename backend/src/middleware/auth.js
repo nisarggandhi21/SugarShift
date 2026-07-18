@@ -9,9 +9,11 @@ const issueToken = (res, user) => {
     { expiresIn: "7d" }
   );
 
+  const isProd = process.env.NODE_ENV === "production";
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
-    sameSite: "lax",
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 };

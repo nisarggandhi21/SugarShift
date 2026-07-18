@@ -85,7 +85,12 @@ const me = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie(COOKIE_NAME);
+  const isProd = process.env.NODE_ENV === "production";
+  res.clearCookie(COOKIE_NAME, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+  });
   res.json({ ok: true });
 };
 
