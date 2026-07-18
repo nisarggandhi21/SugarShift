@@ -28,4 +28,16 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-module.exports = { issueToken, requireAuth, COOKIE_NAME };
+const optionalAuth = (req, res, next) => {
+  const token = req.cookies?.[COOKIE_NAME];
+  if (token) {
+    try {
+      req.user = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      // ignore invalid/expired token — proceed as a logged-out request
+    }
+  }
+  next();
+};
+
+module.exports = { issueToken, requireAuth, optionalAuth, COOKIE_NAME };

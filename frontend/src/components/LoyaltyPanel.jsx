@@ -1,11 +1,4 @@
-const TIER_PERKS = {
-  Bronze: ['Welcome gift on signup', 'Birthday surprise'],
-  Silver: ['Free shipping', 'Early access to new drops'],
-  Gold: ['Free shipping', 'Early access to drops', 'Exclusive gift with orders'],
-  Diamond: ['All Gold perks', 'Dedicated beauty concierge', 'First access to launches'],
-}
-
-const TIER_ORDER = ['Bronze', 'Silver', 'Gold', 'Diamond']
+import { TIER_ORDER, TIER_PERKS } from '../loyaltyTiers'
 
 const TEXT_CLASSES = {
   bronze: 'text-tier-bronze-ink',

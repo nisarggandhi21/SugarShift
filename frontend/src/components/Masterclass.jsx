@@ -39,9 +39,9 @@ function Masterclass({ user, onNotify }) {
         <div className="mt-3 flex flex-wrap items-start justify-between gap-6">
           <div className="flex items-start gap-4">
             <img
-              src={avatarUrl(session.host.instructor)}
+              src={session.host.photo || avatarUrl(session.host.instructor)}
               alt={session.host.instructor}
-              className="h-16 w-16 flex-shrink-0 rounded-full border-2 border-line bg-surface"
+              className="h-16 w-16 flex-shrink-0 rounded-full border-2 border-line bg-surface object-cover"
             />
             <div>
               <span className="mb-2 inline-block rounded-full border-2 border-line bg-yellow px-3 py-1 text-[11px] font-extrabold tracking-wide uppercase">

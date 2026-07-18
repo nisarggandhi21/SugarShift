@@ -5,7 +5,7 @@ import LoyaltyPanel from './LoyaltyPanel'
 
 const CATEGORIES = ['All', 'Lips', 'Eyes', 'Face', 'Skincare', 'Nails', 'Fragrance & Body', 'Kits & Sets']
 
-function Shop({ user, onAddToCart }) {
+function Shop({ user, onAddToCart, onOpenProduct }) {
   const [products, setProducts] = useState([])
   const [category, setCategory] = useState('All')
   const [loading, setLoading] = useState(true)
@@ -52,7 +52,7 @@ function Shop({ user, onAddToCart }) {
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5 text-left">
           {products.map((p) => (
-            <ProductCard key={p.id} product={p} onAddToCart={onAddToCart} />
+            <ProductCard key={p.id} product={p} onAddToCart={onAddToCart} onOpenProduct={onOpenProduct} />
           ))}
         </div>
       )}

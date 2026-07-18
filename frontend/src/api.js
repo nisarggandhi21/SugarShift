@@ -17,6 +17,8 @@ export const getProducts = (category) =>
 
 export const getCategories = () => request('/api/products/categories')
 
+export const getProduct = (id) => request(`/api/products/${id}`)
+
 export const getMyOrders = () => request('/api/orders/me')
 
 export const checkoutCart = (items) =>
@@ -39,3 +41,37 @@ export const submitInvoiceClaim = (formData) =>
   request('/api/invoice-claims', { method: 'POST', body: formData })
 
 export const getMyInvoiceClaims = () => request('/api/invoice-claims/me')
+
+export const subscribeToProduct = (productId, months) =>
+  request('/api/subscriptions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ productId, months }),
+  })
+
+export const getMySubscriptions = () => request('/api/subscriptions/me')
+
+export const getCommunityCategories = () => request('/api/community/categories')
+
+export const getCommunityPosts = (category) =>
+  request(`/api/community/posts${category ? `?category=${encodeURIComponent(category)}` : ''}`)
+
+export const createCommunityPost = (post) =>
+  request('/api/community/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(post),
+  })
+
+export const toggleCommunityLike = (postId) =>
+  request(`/api/community/posts/${postId}/like`, { method: 'POST' })
+
+export const getCommunityComments = (postId) =>
+  request(`/api/community/posts/${postId}/comments`)
+
+export const createCommunityComment = (postId, body) =>
+  request(`/api/community/posts/${postId}/comments`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ body }),
+  })

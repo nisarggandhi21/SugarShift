@@ -7,6 +7,7 @@ const LOYALTY_ITEMS = [
   { key: 'invoice-claim', label: 'Claim from invoice' },
   { key: 'referrals', label: 'Refer & earn' },
   { key: 'masterclass', label: 'Masterclass' },
+  { key: 'tier-benefits', label: 'Tier benefits' },
 ]
 
 const TIER_CHIP_CLASSES = {
@@ -47,6 +48,18 @@ function Navbar({
           }
         >
           Shop
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onNavigate('community')}
+          className={
+            view === 'community'
+              ? 'shrink-0 rounded-md border-2 border-line bg-yellow px-3 py-1.5 text-sm font-bold text-ink'
+              : 'shrink-0 rounded-md px-3.5 py-2 text-sm font-bold text-ink-muted transition hover:bg-cream hover:text-ink'
+          }
+        >
+          Community
         </button>
 
         <NavDropdown label="Loyalty" items={LOYALTY_ITEMS} activeKey={view} onSelect={onNavigate} />

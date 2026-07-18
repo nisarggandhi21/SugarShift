@@ -5,10 +5,13 @@ import Redeem from './components/Redeem'
 import InvoiceClaim from './components/InvoiceClaim'
 import Referrals from './components/Referrals'
 import Masterclass from './components/Masterclass'
+import TierBenefits from './components/TierBenefits'
 import OrdersHistory from './components/OrdersHistory'
+import ProductDetail from './components/ProductDetail'
+import Community from './components/Community'
 import CartDrawer from './components/CartDrawer'
 import Toast from './components/Toast'
-import { getMe, checkoutCart } from './api'
+import { getMe, checkoutCart, subscribeToProduct } from './api'
 import { getInitialTheme, applyTheme } from './theme'
 import { getInitialCart, saveCart } from './cart'
 
@@ -22,6 +25,7 @@ function App() {
   const [cart, setCart] = useState(getInitialCart)
   const [cartOpen, setCartOpen] = useState(false)
   const [checkingOut, setCheckingOut] = useState(false)
+  const [selectedProductId, setSelectedProductId] = useState(null)
   const toastTimer = useRef(null)
 
   useEffect(() => {
@@ -107,6 +111,40 @@ function App() {
     }
   }
 
+  const requireAuth = () => {
+    setMenuOpen(true)
+    notify('Sign in to continue')
+  }
+
+  const handleOpenProduct = (product) => {
+    setSelectedProductId(product.id)
+    setView('product')
+  }
+
+  const handleDirectCheckout = async (product, quantity) => {
+    try {
+      const { orders, loyalty } = await checkoutCart([{ productId: product.id, quantity }])
+      handleLoyaltyUpdate(loyalty)
+      const totalPoints = orders.reduce((sum, o) => sum + o.pointsEarned, 0)
+      notify(`Order placed — +${totalPoints} pts earned`, 'success')
+    } catch (err) {
+      notify(err.message, 'error')
+    }
+  }
+
+  const handleSubscribe = async (product, months) => {
+    try {
+      const { subscription, order, loyalty } = await subscribeToProduct(product.id, months)
+      handleLoyaltyUpdate(loyalty)
+      notify(
+        `Subscribed! ${subscription.discountPercent}% off applied — +${order.pointsEarned} pts earned`,
+        'success'
+      )
+    } catch (err) {
+      notify(err.message, 'error')
+    }
+  }
+
   if (loading) return null
 
   const cartCount = cart.reduce((sum, i) => sum + i.quantity, 0)
@@ -127,7 +165,23 @@ function App() {
         onCartOpen={() => setCartOpen(true)}
       />
 
-      {view === 'shop' && <Shop user={user} onAddToCart={handleAddToCart} />}
+      {view === 'shop' && (
+        <Shop user={user} onAddToCart={handleAddToCart} onOpenProduct={handleOpenProduct} />
+      )}
+      {view === 'product' && (
+        <ProductDetail
+          productId={selectedProductId}
+          user={user}
+          onAddToCart={handleAddToCart}
+          onDirectCheckout={handleDirectCheckout}
+          onSubscribe={handleSubscribe}
+          onRequireAuth={requireAuth}
+          onNotify={notify}
+        />
+      )}
+      {view === 'community' && (
+        <Community user={user} onRequireAuth={requireAuth} onNotify={notify} />
+      )}
       {view === 'redeem' && (
         <Redeem user={user} onLoyaltyUpdate={handleLoyaltyUpdate} onNotify={notify} />
       )}
@@ -136,6 +190,7 @@ function App() {
       )}
       {view === 'referrals' && <Referrals user={user} onNotify={notify} />}
       {view === 'masterclass' && <Masterclass user={user} onNotify={notify} />}
+      {view === 'tier-benefits' && <TierBenefits user={user} />}
       {view === 'orders' && <OrdersHistory user={user} />}
 
       <CartDrawer
