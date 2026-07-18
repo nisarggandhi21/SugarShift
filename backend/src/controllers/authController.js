@@ -2,12 +2,14 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const User = require("../models/User");
 const { issueToken, COOKIE_NAME } = require("../middleware/auth");
+const { loyaltyStatus } = require("../utils/loyalty");
 
 const toPublicUser = (user) => ({
   id: user.id,
   email: user.email,
   name: user.name,
   avatarUrl: user.avatar_url,
+  loyalty: loyaltyStatus(user.points),
 });
 
 const register = async (req, res) => {

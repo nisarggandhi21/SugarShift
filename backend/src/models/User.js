@@ -1,7 +1,8 @@
 const { pool } = require("../config/db");
+const { tierForPoints } = require("../utils/loyalty");
 
-const ensureTable = () =>
-  pool.query(`
+const ensureTable = async () => {
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
       email TEXT UNIQUE NOT NULL,
@@ -9,9 +10,18 @@ const ensureTable = () =>
       google_id TEXT UNIQUE,
       name TEXT,
       avatar_url TEXT,
+      points INTEGER NOT NULL DEFAULT 0,
+      tier TEXT NOT NULL DEFAULT 'Bronze',
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
+  await pool.query(
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS points INTEGER NOT NULL DEFAULT 0`
+  );
+  await pool.query(
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS tier TEXT NOT NULL DEFAULT 'Bronze'`
+  );
+};
 
 const findById = async (id) => {
   const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
@@ -60,6 +70,18 @@ const linkGoogleId = async (id, googleId, avatarUrl) => {
   return rows[0];
 };
 
+const addPoints = async (id, points) => {
+  const user = await findById(id);
+  const newPoints = user.points + points;
+  const newTier = tierForPoints(newPoints);
+
+  const { rows } = await pool.query(
+    `UPDATE users SET points = $2, tier = $3 WHERE id = $1 RETURNING *`,
+    [id, newPoints, newTier]
+  );
+  return rows[0];
+};
+
 module.exports = {
   ensureTable,
   findById,
@@ -68,4 +90,5 @@ module.exports = {
   createLocal,
   createGoogle,
   linkGoogleId,
+  addPoints,
 };
