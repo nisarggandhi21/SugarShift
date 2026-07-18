@@ -25,3 +25,10 @@ export const buyProduct = (productId, quantity = 1) =>
   })
 
 export const getMyOrders = () => request('/api/orders/me')
+
+export const getRewards = () => request('/api/rewards')
+
+export const redeemReward = (id) =>
+  request(`/api/rewards/${id}/redeem`, { method: 'POST' })
+
+export const getRedemptions = () => request('/api/rewards/redemptions')

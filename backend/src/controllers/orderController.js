@@ -1,6 +1,6 @@
 const Product = require("../models/Product");
 const Order = require("../models/Order");
-const User = require("../models/User");
+const PointsLedger = require("../models/PointsLedger");
 const { pointsForAmount, loyaltyStatus } = require("../utils/loyalty");
 
 const create = async (req, res) => {
@@ -14,7 +14,10 @@ const create = async (req, res) => {
   const pointsEarned = pointsForAmount(amount);
 
   const order = await Order.create(req.user.id, product.id, qty, amount, pointsEarned);
-  const user = await User.addPoints(req.user.id, pointsEarned);
+  await PointsLedger.earn(req.user.id, order.id, pointsEarned);
+
+  const balance = await PointsLedger.getBalance(req.user.id);
+  const nextExpiry = await PointsLedger.getNextExpiry(req.user.id);
 
   res.status(201).json({
     order: {
@@ -27,7 +30,7 @@ const create = async (req, res) => {
       pointsEarned: order.points_earned,
       createdAt: order.created_at,
     },
-    loyalty: loyaltyStatus(user.points),
+    loyalty: loyaltyStatus(balance, nextExpiry),
   });
 };
 

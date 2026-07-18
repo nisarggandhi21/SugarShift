@@ -3,6 +3,7 @@ import ThemeToggle from './ThemeToggle'
 
 const TABS = [
   { key: 'shop', label: 'Shop' },
+  { key: 'redeem', label: 'Redeem' },
   { key: 'orders', label: 'My orders' },
 ]
 
@@ -50,13 +51,15 @@ function Navbar({
 
       <div className="flex items-center gap-3.5">
         {user && (
-          <span
-            className={`hidden whitespace-nowrap rounded-full border-2 border-line px-2.5 py-1 text-[11.5px] font-extrabold tracking-wide sm:inline ${
+          <button
+            type="button"
+            onClick={() => onNavigate('redeem')}
+            className={`hidden rounded-full border-2 border-line px-2.5 py-1 text-[11.5px] font-extrabold tracking-wide whitespace-nowrap transition hover:-translate-x-px hover:-translate-y-px hover:shadow-hard-sm sm:inline ${
               TIER_CHIP_CLASSES[user.loyalty.tier.toLowerCase()]
             }`}
           >
             {user.loyalty.tier} · {user.loyalty.points.toLocaleString('en-IN')} pts
-          </span>
+          </button>
         )}
         <ThemeToggle theme={theme} onToggle={onThemeToggle} />
         <AccountMenu

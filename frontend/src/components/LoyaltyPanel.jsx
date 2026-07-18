@@ -21,8 +21,11 @@ const FILL_CLASSES = {
   diamond: 'bg-tier-diamond',
 }
 
+const dateLabel = (d) =>
+  new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+
 function LoyaltyPanel({ loyalty }) {
-  const { points, tier, nextTier, pointsToNextTier, currentTierMin, nextTierMin } = loyalty
+  const { points, tier, nextTier, pointsToNextTier, currentTierMin, nextTierMin, nextExpiry } = loyalty
   const key = tier.toLowerCase()
 
   const progress = nextTierMin
@@ -67,6 +70,12 @@ function LoyaltyPanel({ loyalty }) {
           ? `${pointsToNextTier.toLocaleString('en-IN')} points to ${nextTier}`
           : "You've reached our top tier!"}
       </p>
+
+      {nextExpiry && (
+        <p className="mt-1 text-[12px] font-semibold text-accent-deep">
+          {nextExpiry.points.toLocaleString('en-IN')} pts expire on {dateLabel(nextExpiry.date)}
+        </p>
+      )}
 
       <ul className="mt-4 flex flex-wrap gap-2 border-t-2 border-dashed border-line pt-3.5 pl-0">
         {TIER_PERKS[tier].map((perk) => (

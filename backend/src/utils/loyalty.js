@@ -1,13 +1,14 @@
 const TIERS = [
   { name: "Bronze", min: 0 },
-  { name: "Silver", min: 2000 },
-  { name: "Gold", min: 6000 },
-  { name: "Diamond", min: 15000 },
+  { name: "Silver", min: 200 },
+  { name: "Gold", min: 600 },
+  { name: "Diamond", min: 1500 },
 ];
 
-const POINTS_PER_RUPEE = 1;
+const POINTS_RATE = 0.1; // 10% of purchase value, earned as points
+const EXPIRY_MONTHS = 6;
 
-const pointsForAmount = (amount) => Math.round(amount * POINTS_PER_RUPEE);
+const pointsForAmount = (amount) => Math.round(amount * POINTS_RATE);
 
 const tierForPoints = (points) => {
   let current = TIERS[0];
@@ -17,7 +18,7 @@ const tierForPoints = (points) => {
   return current.name;
 };
 
-const loyaltyStatus = (points) => {
+const loyaltyStatus = (points, nextExpiry) => {
   const idx = TIERS.findIndex((t) => t.name === tierForPoints(points));
   const current = TIERS[idx];
   const next = TIERS[idx + 1] || null;
@@ -29,7 +30,15 @@ const loyaltyStatus = (points) => {
     pointsToNextTier: next ? next.min - points : 0,
     currentTierMin: current.min,
     nextTierMin: next?.min || null,
+    nextExpiry: nextExpiry || null,
   };
 };
 
-module.exports = { TIERS, pointsForAmount, tierForPoints, loyaltyStatus };
+module.exports = {
+  TIERS,
+  POINTS_RATE,
+  EXPIRY_MONTHS,
+  pointsForAmount,
+  tierForPoints,
+  loyaltyStatus,
+};
