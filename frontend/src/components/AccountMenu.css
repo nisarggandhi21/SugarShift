@@ -1,0 +1,240 @@
+.account-menu {
+  position: relative;
+}
+
+.account-trigger {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-hairline-strong);
+  background: var(--bg-surface-raised);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.account-trigger svg {
+  width: 20px;
+  height: 20px;
+}
+
+.account-trigger:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 4px var(--accent-wash);
+}
+
+.account-trigger.is-authed {
+  border-color: var(--accent);
+}
+
+.avatar-initials {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+
+.avatar-large {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.account-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 300px;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-hairline-strong);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  padding: 18px;
+  z-index: 40;
+  animation: panel-in 0.16s ease-out;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.account-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.account-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.account-identity strong {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.account-identity span {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.mode-switch {
+  display: flex;
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 14px;
+}
+
+.mode-switch button {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 7px 0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: background 0.15s, color 0.15s;
+}
+
+.mode-switch button.is-active {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.account-form input {
+  font-size: 13.5px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--border-hairline-strong);
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+.account-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.account-form input::placeholder {
+  color: var(--text-muted);
+}
+
+.account-error {
+  color: var(--status-critical);
+  font-size: 12.5px;
+  margin: 0;
+}
+
+.btn-primary {
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 9px 0;
+  margin-top: 2px;
+  transition: filter 0.15s;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-ghost {
+  border: 1px solid var(--border-hairline-strong);
+  border-radius: 8px;
+  background: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  width: 100%;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.btn-ghost:hover {
+  border-color: var(--status-critical);
+  color: var(--status-critical);
+}
+
+.account-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.account-divider::before,
+.account-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-hairline);
+}
+
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid var(--border-hairline-strong);
+  border-radius: 8px;
+  padding: 9px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.btn-google svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-google:hover {
+  border-color: var(--border-hairline-strong);
+  background: var(--bg-hover);
+}

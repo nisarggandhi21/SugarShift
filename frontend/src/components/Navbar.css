@@ -1,0 +1,74 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--border-hairline);
+  background: rgba(11, 10, 8, 0.75);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, var(--accent), #7a4a12);
+  box-shadow: 0 0 12px var(--accent-wash-strong);
+  flex-shrink: 0;
+}
+
+.brand-word {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+
+.navbar-tabs {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.navbar-tabs button {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 7px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.navbar-tabs button:hover {
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.navbar-tabs button.is-active {
+  color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+@media (max-width: 760px) {
+  .navbar-tabs {
+    display: none;
+  }
+}
