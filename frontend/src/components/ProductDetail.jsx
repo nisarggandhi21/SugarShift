@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 import { getProduct } from '../api'
-import { getDummyStats } from '../productStats'
+import { getDummyStats, getRegionStats } from '../productStats'
+
+const REGIONS = [
+  { key: 'north', label: 'North', barClass: 'bg-accent' },
+  { key: 'south', label: 'South', barClass: 'bg-yellow' },
+  { key: 'east', label: 'East', barClass: 'bg-tier-diamond' },
+  { key: 'west', label: 'West', barClass: 'bg-tier-bronze' },
+]
 
 const money = (n) => `₹${Number(n).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`
 
@@ -45,6 +52,7 @@ function ProductDetail({ productId, user, onAddToCart, onDirectCheckout, onSubsc
   const price = Number(product.price)
   const compareAt = product.compare_at_price ? Number(product.compare_at_price) : null
   const stats = getDummyStats(product.id)
+  const regionStats = getRegionStats(product.id)
   const activePlan = PLANS.find((p) => p.key === plan)
   const unitPrice = plan === 'one-time' ? price : Math.round(price * (1 - activePlan.discountPercent / 100) * 100) / 100
 
@@ -115,6 +123,27 @@ function ProductDetail({ productId, user, onAddToCart, onDirectCheckout, onSubsc
             {stats.bought}+ bought in the past month · {stats.subscriberPercent}% of buyers are
             subscribers
           </p>
+
+          <div className="mt-3">
+            <div className="flex h-2.5 overflow-hidden rounded-full border-2 border-line">
+              {REGIONS.map((r) => (
+                <div
+                  key={r.key}
+                  className={r.barClass}
+                  style={{ width: `${regionStats[r.key]}%` }}
+                  title={`${r.label}: ${regionStats[r.key]}%`}
+                />
+              ))}
+            </div>
+            <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+              {REGIONS.map((r) => (
+                <span key={r.key} className="flex items-center gap-1.5 text-[11px] font-bold text-ink-muted">
+                  <span className={`h-2 w-2 rounded-full ${r.barClass}`} />
+                  {r.label} {regionStats[r.key]}%
+                </span>
+              ))}
+            </div>
+          </div>
 
           <div className="card mt-6 bg-cream">
             <span className="mb-3 block text-[11px] font-extrabold tracking-wide text-ink-muted uppercase">
