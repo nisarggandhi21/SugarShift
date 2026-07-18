@@ -10,13 +10,19 @@ const initials = (user) => {
     .toUpperCase()
 }
 
+const refFromUrl = () => new URLSearchParams(window.location.search).get('ref') || ''
+
 function AccountMenu({ user, onAuthSuccess, onLogout, open, onOpenChange }) {
   const setOpen = onOpenChange
-  const [mode, setMode] = useState('login')
-  const [form, setForm] = useState({ email: '', password: '', name: '' })
+  const [mode, setMode] = useState(refFromUrl() ? 'register' : 'login')
+  const [form, setForm] = useState({ email: '', password: '', name: '', referralCode: refFromUrl() })
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const rootRef = useRef(null)
+
+  useEffect(() => {
+    if (refFromUrl() && !user) setOpen(true)
+  }, [])
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -59,7 +65,7 @@ function AccountMenu({ user, onAuthSuccess, onLogout, open, onOpenChange }) {
       }
       onAuthSuccess(data.user)
       setOpen(false)
-      setForm({ email: '', password: '', name: '' })
+      setForm({ email: '', password: '', name: '', referralCode: '' })
     } finally {
       setBusy(false)
     }
@@ -175,6 +181,15 @@ function AccountMenu({ user, onAuthSuccess, onLogout, open, onOpenChange }) {
                   required
                   className="rounded-lg border-2 border-line bg-cream px-2.5 py-2 text-[13.5px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
                 />
+                {mode === 'register' && (
+                  <input
+                    name="referralCode"
+                    placeholder="Referral code (optional)"
+                    value={form.referralCode}
+                    onChange={handleChange}
+                    className="rounded-lg border-2 border-line bg-cream px-2.5 py-2 text-[13.5px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
+                  />
+                )}
                 {error && <p className="m-0 text-[12.5px] font-semibold text-status-critical">{error}</p>}
                 <button
                   type="submit"

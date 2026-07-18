@@ -14,7 +14,12 @@ const create = async (req, res) => {
   const pointsEarned = pointsForAmount(amount);
 
   const order = await Order.create(req.user.id, product.id, qty, amount, pointsEarned);
-  await PointsLedger.earn(req.user.id, order.id, pointsEarned);
+  await PointsLedger.earn(req.user.id, {
+    orderId: order.id,
+    points: pointsEarned,
+    source: "order",
+    note: `Order #${order.id}`,
+  });
 
   const balance = await PointsLedger.getBalance(req.user.id);
   const nextExpiry = await PointsLedger.getNextExpiry(req.user.id);

@@ -2,8 +2,10 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const User = require("../models/User");
 const PointsLedger = require("../models/PointsLedger");
+const Referral = require("../models/Referral");
 const { issueToken, COOKIE_NAME } = require("../middleware/auth");
-const { loyaltyStatus } = require("../utils/loyalty");
+const { loyaltyStatus, tierForPoints } = require("../utils/loyalty");
+const { fromReferralCode, toReferralCode, referralBonusForTier } = require("../utils/referral");
 
 const toPublicUser = async (user) => {
   const balance = await PointsLedger.getBalance(user.id);
@@ -14,12 +16,31 @@ const toPublicUser = async (user) => {
     email: user.email,
     name: user.name,
     avatarUrl: user.avatar_url,
+    referralCode: toReferralCode(user.id),
     loyalty: loyaltyStatus(balance, nextExpiry),
   };
 };
 
+const applyReferral = async (referralCode, referredId) => {
+  const referrerId = fromReferralCode(referralCode);
+  if (!referrerId || referrerId === referredId) return;
+
+  const referrer = await User.findById(referrerId);
+  if (!referrer) return;
+
+  const referrerBalance = await PointsLedger.getBalance(referrerId);
+  const bonus = referralBonusForTier(tierForPoints(referrerBalance));
+
+  await Referral.create(referrerId, referredId, bonus);
+  await PointsLedger.earn(referrerId, {
+    points: bonus,
+    source: "referral",
+    note: `Referral bonus for inviting a friend`,
+  });
+};
+
 const register = async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, referralCode } = req.body;
   if (!email || !password) {
     return res.status(400).json({ error: "Email and password are required" });
   }
@@ -31,6 +52,10 @@ const register = async (req, res) => {
 
   const passwordHash = await bcrypt.hash(password, 10);
   const user = await User.createLocal(email, passwordHash, name);
+
+  if (referralCode) {
+    await applyReferral(referralCode, user.id);
+  }
 
   issueToken(res, user);
   res.status(201).json({ user: await toPublicUser(user) });

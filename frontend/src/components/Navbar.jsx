@@ -4,6 +4,8 @@ import ThemeToggle from './ThemeToggle'
 const TABS = [
   { key: 'shop', label: 'Shop' },
   { key: 'redeem', label: 'Redeem' },
+  { key: 'referrals', label: 'Refer & earn' },
+  { key: 'masterclass', label: 'Masterclass' },
   { key: 'orders', label: 'My orders' },
 ]
 
@@ -32,7 +34,7 @@ function Navbar({
         <span className="font-display text-2xl uppercase tracking-wide">SugarShift</span>
       </div>
 
-      <nav className="flex flex-1 gap-1.5">
+      <nav className="flex flex-1 gap-1.5 overflow-x-auto">
         {TABS.map((tab) => (
           <button
             key={tab.key}
@@ -40,8 +42,8 @@ function Navbar({
             onClick={() => onNavigate(tab.key)}
             className={
               view === tab.key
-                ? 'rounded-md border-2 border-line bg-yellow px-3 py-1.5 text-sm font-bold text-ink'
-                : 'rounded-md px-3.5 py-2 text-sm font-bold text-ink-muted transition hover:bg-cream hover:text-ink'
+                ? 'shrink-0 rounded-md border-2 border-line bg-yellow px-3 py-1.5 text-sm font-bold text-ink'
+                : 'shrink-0 rounded-md px-3.5 py-2 text-sm font-bold text-ink-muted transition hover:bg-cream hover:text-ink'
             }
           >
             {tab.label}

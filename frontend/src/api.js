@@ -32,3 +32,5 @@ export const redeemReward = (id) =>
   request(`/api/rewards/${id}/redeem`, { method: 'POST' })
 
 export const getRedemptions = () => request('/api/rewards/redemptions')
+
+export const getMyReferrals = () => request('/api/referrals/me')

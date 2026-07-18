@@ -9,10 +9,12 @@ const User = require("./models/User");
 const Product = require("./models/Product");
 const Order = require("./models/Order");
 const PointsLedger = require("./models/PointsLedger");
+const Referral = require("./models/Referral");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const rewardRoutes = require("./routes/rewardRoutes");
+const referralRoutes = require("./routes/referralRoutes");
 
 const app = express();
 
@@ -35,6 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/rewards", rewardRoutes);
+app.use("/api/referrals", referralRoutes);
 
 const PORT = process.env.PORT || 5000;
 
@@ -43,6 +46,7 @@ connectDB()
   .then(() => Product.ensureTable())
   .then(() => Order.ensureTable())
   .then(() => PointsLedger.ensureTable())
+  .then(() => Referral.ensureTable())
   .then(() => Product.seedIfEmpty())
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import Navbar from './components/Navbar'
 import Shop from './components/Shop'
 import Redeem from './components/Redeem'
+import Referrals from './components/Referrals'
+import Masterclass from './components/Masterclass'
 import OrdersHistory from './components/OrdersHistory'
 import Toast from './components/Toast'
 import { getMe } from './api'
@@ -66,6 +68,8 @@ function App() {
       {view === 'redeem' && (
         <Redeem user={user} onLoyaltyUpdate={handleLoyaltyUpdate} onNotify={notify} />
       )}
+      {view === 'referrals' && <Referrals user={user} onNotify={notify} />}
+      {view === 'masterclass' && <Masterclass user={user} onNotify={notify} />}
       {view === 'orders' && <OrdersHistory user={user} />}
 
       <Toast message={toast?.message} tone={toast?.tone} />

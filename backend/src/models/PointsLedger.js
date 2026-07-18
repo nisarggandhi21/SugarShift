@@ -1,8 +1,8 @@
 const { pool } = require("../config/db");
 const { EXPIRY_MONTHS } = require("../utils/loyalty");
 
-const ensureTable = () =>
-  pool.query(`
+const ensureTable = async () => {
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS points_transactions (
       id SERIAL PRIMARY KEY,
       user_id INTEGER NOT NULL REFERENCES users(id),
@@ -11,25 +11,34 @@ const ensureTable = () =>
       order_id INTEGER REFERENCES orders(id),
       reward_id TEXT,
       reward_name TEXT,
+      source TEXT NOT NULL DEFAULT 'order',
+      note TEXT,
       expires_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
+  await pool.query(
+    `ALTER TABLE points_transactions ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'order'`
+  );
+  await pool.query(
+    `ALTER TABLE points_transactions ADD COLUMN IF NOT EXISTS note TEXT`
+  );
+};
 
-const earn = async (userId, orderId, points) => {
+const earn = async (userId, { orderId = null, points, source = "order", note = null }) => {
   const { rows } = await pool.query(
-    `INSERT INTO points_transactions (user_id, type, points, order_id, expires_at)
-     VALUES ($1, 'earn', $2, $3, now() + $4::interval)
+    `INSERT INTO points_transactions (user_id, type, points, order_id, source, note, expires_at)
+     VALUES ($1, 'earn', $2, $3, $4, $5, now() + $6::interval)
      RETURNING *`,
-    [userId, points, orderId, `${EXPIRY_MONTHS} months`]
+    [userId, points, orderId, source, note, `${EXPIRY_MONTHS} months`]
   );
   return rows[0];
 };
 
 const redeem = async (userId, rewardId, rewardName, points) => {
   const { rows } = await pool.query(
-    `INSERT INTO points_transactions (user_id, type, points, reward_id, reward_name)
-     VALUES ($1, 'redeem', $2, $3, $4)
+    `INSERT INTO points_transactions (user_id, type, points, reward_id, reward_name, source)
+     VALUES ($1, 'redeem', $2, $3, $4, 'redemption')
      RETURNING *`,
     [userId, points, rewardId, rewardName]
   );
